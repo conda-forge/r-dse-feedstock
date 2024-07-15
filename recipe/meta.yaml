@@ -1,6 +1,5 @@
 {% set version = '2020.2-1' %}
 {% set posix = 'm2-' if win else '' %}
-{% set native = 'm2w64-' if win else '' %}
 
 package:
   name: r-dse
@@ -13,8 +12,7 @@ source:
   sha256: 6c7ac300a1cb70d458249feef1488f7f9e867e25b612a85281487f1d6dee199c
 
 build:
-  merge_build_host: True  # [win]
-  number: 2
+  number: 3
   rpaths:
     - lib/R/lib/
     - lib/
@@ -22,7 +20,9 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}              # [not win]
+    - {{ stdlib("c") }}                # [not win]
     - {{ compiler('m2w64_c') }}        # [win]
+    - {{ stdlib("m2w64_c") }}          # [win]
     - {{ compiler('fortran') }}        # [not win]
     - {{ compiler('m2w64_fortran') }}  # [win]
     - {{ posix }}filesystem        # [win]
@@ -40,7 +40,6 @@ requirements:
     - liblapack
   run:
     - r-base
-    - {{ native }}gcc-libs         # [win]
     - r-setrng >=2004.4_1
     - r-tfplot
     - r-tframe >=2007.5_3
